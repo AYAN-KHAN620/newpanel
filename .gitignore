@@ -1,6 +1,0 @@
-__pycache__/
-*.pyc
-.env
-data_v2.json
-.venv/
-venv/
