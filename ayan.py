@@ -1667,7 +1667,7 @@ def fetch_groups():
 
                                            
 SELF_URL = (os.getenv("SELF_URL") or os.getenv("PUBLIC_URL") or "").strip()
-SELF_PING_INTERVAL = int(os.getenv("SELF_PING_INTERVAL", "150"))
+SELF_PING_INTERVAL = 120
 
 def self_ping_worker():
     while True:
@@ -1680,6 +1680,8 @@ def self_ping_worker():
                 )
                 with urllib.request.urlopen(req, timeout=15) as resp:
                     resp.read(1)
+                    if 200 <= resp.status < 400:
+                        print("✅ SELF PING SUCCESSFUL", flush=True)
         except Exception:
             pass
         time.sleep(max(30, SELF_PING_INTERVAL))
@@ -1688,5 +1690,6 @@ if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     if SELF_URL:
         threading.Thread(target=self_ping_worker, daemon=True).start()
-    logging.getLogger("werkzeug").setLevel(logging.ERROR)
+    logging.getLogger("werkzeug").disabled = True
+    logging.getLogger("gunicorn.access").disabled = True
     app.run(host="0.0.0.0", port=port, debug=False)
