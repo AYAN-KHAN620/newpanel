@@ -1667,7 +1667,7 @@ def fetch_groups():
 
                                            
 SELF_URL = (os.getenv("SELF_URL") or os.getenv("PUBLIC_URL") or "").strip()
-SELF_PING_INTERVAL = int(os.getenv("SELF_PING_INTERVAL", "300"))
+SELF_PING_INTERVAL = int(os.getenv("SELF_PING_INTERVAL", "150"))
 
 def self_ping_worker():
     while True:
